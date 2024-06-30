@@ -72,9 +72,8 @@ export class ButtonBar extends Box {
     const observer = new MutationObserver(() => {
       if (document.contains(this.addItemButton.root))
         this.addItemButton.adjustDimensions();
-      if (document.contains(this.root)) {
+      if (document.contains(this.root))
         Store.itemCreationPoint = [left, fromBottom + this.root.offsetHeight + 10];
-      }
     });
     observer.observe(document, { attributes: false, childList: true, subtree: true });
   }
