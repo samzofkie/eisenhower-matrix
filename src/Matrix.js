@@ -1,9 +1,5 @@
-//import { Component } from '@samzofkie/component';
-import { Component } from "rhizome";
+import { Component, Store } from "rhizome";
 import { Box } from './Box.js';
-import { todo } from './todo.js';
-
-console.log(todo);
 
 function degreesToRadians(degree) {
   return degree * Math.PI / 180;
@@ -95,7 +91,7 @@ class MatrixGrid extends Component {
       this.labels.unimportant, this.boxes.delegate, this.boxes.delete,
     );
 
-    // Adjust grid to size columns and rows depending on label dimensions
+    // Adjust grid to size columns and rows depending on label dimensions.
     const observer = new MutationObserver(() => {
       if (Object.values(this.labels).every(label => document.contains(label.span.root))) {
         
@@ -171,7 +167,7 @@ class MatrixGrid extends Component {
 
   createBoxes() {
     const boxStyle = {
-      border: '2px solid blue',
+      border: `2px solid ${Store.colors[2]}`,
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',

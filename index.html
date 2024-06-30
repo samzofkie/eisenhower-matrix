@@ -2,13 +2,25 @@
 <!-- don't ask for favicon -->
 <link rel="icon" href="data:,">
 <script type="module">
-  import { Page, Component } from 'rhizome';
+  import { Page, Component, Store } from 'rhizome';
   import { Matrix } from './src/Matrix.js';
+  import { ButtonBar } from './src/ButtonBar.js';
 
-  let a = new Page(
-    'todo-matrix',
+  Store.colors = [
+    '#2d2c45',
+    '#4f416b',
+    '#0862bd'
+  ];
+
+  Store.items = [];
+
+  Store.itemCreationPoint = [20, 20];
+  Store.buttonBarWidth = 20;
+
+  let page = new Page(
+    'eisenhower-matrix',
     {
-      backgroundColor: '#2d2c45',
+      backgroundColor: Store.colors[0],
       color: 'white',
       fontFamily: 'Work Sans, Arial, Helvetica, sans-serif',
     },
@@ -26,16 +38,14 @@
         href: 'https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap'
       }
     ),
-    //new Matrix,
   );
 
   document.body.onload = _ => {
-    a.append(new Matrix);
-  }
-
-  /*let b = new Component('span', 'crap');
-  a.append(b);
-  console.log(b);*/
+    page.append(
+      new Matrix,
+      new ButtonBar,
+    );
+  };
   
 </script>
 
