@@ -1,0 +1,41 @@
+<!doctype html>
+<!-- don't ask for favicon -->
+<link rel="icon" href="data:,">
+<script type="module">
+  import { Page, Component } from 'rhizome';
+  import { Matrix } from './src/Matrix.js';
+
+  let a = new Page(
+    'todo-matrix',
+    {
+      backgroundColor: '#2d2c45',
+      color: 'white',
+      fontFamily: 'Work Sans, Arial, Helvetica, sans-serif',
+    },
+    new Component(
+      'meta',
+      {
+        name: 'viewport',
+        content: 'width=device-width, initial-scale=1',
+      },
+    ),
+    new Component(
+      'link',
+      {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap'
+      }
+    ),
+    //new Matrix,
+  );
+
+  document.body.onload = _ => {
+    a.append(new Matrix);
+  }
+
+  /*let b = new Component('span', 'crap');
+  a.append(b);
+  console.log(b);*/
+  
+</script>
+
