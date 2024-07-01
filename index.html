@@ -5,6 +5,7 @@
   import { Page, Component, Store } from 'rhizome';
   import { Matrix } from './src/Matrix.js';
   import { ButtonBar } from './src/ButtonBar.js';
+  import { Item } from './src/Item.js';
   import { DynamicText } from './src/DynamicText.js';
 
   Store.colors = [
@@ -12,11 +13,9 @@
     '#4f416b',
     '#0862bd'
   ];
-
   Store.items = [];
-
-  Store.itemCreationPoint = [20, 20];
-  Store.buttonBarWidth = 20;
+  Store.itemCreationPoint = {x: 20, y: 20};
+  Store.itemWidth = 250;
 
   let page = new Page(
     'eisenhower-matrix',
@@ -43,14 +42,25 @@
   );
 
   document.body.onload = _ => {
-    
-    const text = new DynamicText('Sam Z! Longer longer longer longer!!!', 0, -20);
+    //const text = new DynamicText('Sam Z! Longer longer longer longer!!!', 0, -10);
 
     page.append(
-      new Matrix,
+      //new Matrix,
       new ButtonBar,
-      text,
+      //text,
     );
+
+    let x = 0, y = 0;
+    for (let t of [
+      'Replace bulb in Kia tail light',
+      'Get new computer charger',
+      'Get health insurance',
+    ]) {
+      let item = new Item({x: x, y: y});
+      item.input.append(t);
+      document.body.appendChild(item.root);
+      y += item.root.offsetHeight + 10;
+    }
   };
   
 </script>

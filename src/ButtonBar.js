@@ -45,22 +45,22 @@ class AddItemButton extends Box {
 
   createNewItem() {
     const newItem = new Item;
-    Store.items.push(newItem);
     document.body.append(newItem.root);
+    newItem.input.root.focus();
   }
 }
 
 export class ButtonBar extends Box {
   constructor() {
-    Store.buttonBarWidth = document.body.offsetWidth * 0.2;
-    const fromBottom = 20;
-    const left = (document.body.offsetWidth - Store.buttonBarWidth) / 2;
+    const left = (document.body.offsetWidth - Store.itemWidth) / 2;
+    const bottomPadding = 20;
     super(
       {
         backgroundColor: Store.colors[1],
-        width: Store.buttonBarWidth,
+        width: Store.itemWidth,
+        boxSizing: 'border-box',
         position: 'fixed',
-        bottom: fromBottom,
+
         left: left,
       },
       new AddItemButton,
@@ -68,12 +68,20 @@ export class ButtonBar extends Box {
 
     this.addItemButton = this.children[0];
 
-    // adjustDimensions of AddItemButton once it's rendered, and set Store.itemCreationPoint
+    // adjustDimensions of AddItemButton once it's rendered, set 
+    // Store.itemCreationPoint and proper top value for this.
     const observer = new MutationObserver(() => {
       if (document.contains(this.addItemButton.root))
         this.addItemButton.adjustDimensions();
-      if (document.contains(this.root))
-        Store.itemCreationPoint = [left, fromBottom + this.root.offsetHeight + 10];
+
+      if (document.contains(this.root)) {
+        this.set({top: window.innerHeight - this.root.offsetHeight - bottomPadding});
+        
+        Store.itemCreationPoint = {
+          x: left, 
+          y: 2 * bottomPadding + this.root.offsetHeight
+        };
+      }
     });
     observer.observe(document, { attributes: false, childList: true, subtree: true });
   }
