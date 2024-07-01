@@ -38,7 +38,11 @@ export class Item extends Box {
         this.input.root.focus();
       },
       // Prevents focusing input-div when single clicked on.
-      onmousedown: event => event.preventDefault(),
+      onmousedown: event => {
+        if (document.activeElement !== this.input.root)
+          event.preventDefault();
+        //console.log(document.activeElement === this.input.root);
+      },
     });
   }
 };

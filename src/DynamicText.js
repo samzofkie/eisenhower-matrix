@@ -40,15 +40,19 @@ export class DynamicText extends Component {
     // Letters like 'g' hang a bit over the path, so we just add a little bit 
     // to avoid them getting cut off if the curveHeightCoeff is very low.
     const overhang = 0.2 * height;
-    const maxSVGHeight = (curveHeightCoeff + 1) * height;
+    const maxSVGHeight = (Math.abs(curveHeightCoeff) + 1) * height;
     const svgDimensions = [width + 2 * maxSidePadding, maxSVGHeight + overhang];
 
     const svg = this.createSVG(svgDimensions);
     const path = this.createPath();
-    path.setAttribute('d',  `
-      M ${maxSidePadding} ${maxSVGHeight}
-      Q  ${maxSidePadding + width/2} ${/*maxSVGHeight - curveHeightCoeff * height*/ 0}, ${2*maxSidePadding + width} ${maxSVGHeight}
-    `);
+
+    const [startY, endY] = curveHeightCoeff >= 0 ? [maxSVGHeight, height] : [height, maxSVGHeight];
+    
+    path.setAttribute('d',
+        `M ${maxSidePadding} ${startY}
+        Q ${maxSidePadding + width/2} ${endY}, ${maxSidePadding + width} ${startY}`
+    );
+    
     const textElement = this.createTextElement(text);
 
     svg.appendChild(path);

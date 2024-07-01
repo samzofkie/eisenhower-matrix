@@ -108,8 +108,8 @@ class MatrixGrid extends Component {
         );
         
         this.set({
-          gridTemplateColumns: `${sideLabelsWidth}px auto auto ${sideLabelsWidth}`,
-          gridTemplateRows: `${topLabelsHeight}px auto auto ${topLabelsHeight}`,
+          gridTemplateColumns: `${sideLabelsWidth}px auto auto ${sideLabelsWidth}px`,
+          gridTemplateRows: `${topLabelsHeight}px auto auto ${topLabelsHeight}px`,
         });
       }
     });
@@ -201,7 +201,8 @@ export class Matrix extends Box {
     super(
       {
         backgroundColor: '#4f416b',
-        width: document.body.offsetWidth * 0.6,
+        //width: document.body.offsetWidth * 0.6,
+        display: 'inline-block',
         margin: 'auto',
       },
       new MatrixGrid,
