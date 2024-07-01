@@ -5,6 +5,7 @@
   import { Page, Component, Store } from 'rhizome';
   import { Matrix } from './src/Matrix.js';
   import { ButtonBar } from './src/ButtonBar.js';
+  import { DynamicText } from './src/DynamicText.js';
 
   Store.colors = [
     '#2d2c45',
@@ -23,6 +24,7 @@
       backgroundColor: Store.colors[0],
       color: 'white',
       fontFamily: 'Work Sans, Arial, Helvetica, sans-serif',
+      fontSize: 18,
     },
     new Component(
       'meta',
@@ -41,9 +43,13 @@
   );
 
   document.body.onload = _ => {
+    
+    const text = new DynamicText('Sam Z! Longer longer longer longer!!!', 0, 20);
+
     page.append(
       new Matrix,
       new ButtonBar,
+      text,
     );
   };
   

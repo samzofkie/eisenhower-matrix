@@ -26,6 +26,7 @@ class MatrixLabel extends Component {
         ),
       ),
     );
+    this.text = text;
     this.angle = angle;
     this.middleDiv = this.children[0];
     this.span = this.middleDiv.children[0];
@@ -45,7 +46,6 @@ class MatrixLabel extends Component {
           h = this.span.root.offsetHeight;
 
     this.set({
-      //height: (w + h * Math.tan(Math.PI / 2 - this.angle)) * Math.sin(this.angle),
       height: w * Math.sin(this.angle) + h * Math.sin(Math.PI / 2 - this.angle),
       width: w * Math.cos(this.angle) + h * Math.cos(Math.PI / 2 - this.angle), 
     });
@@ -54,8 +54,6 @@ class MatrixLabel extends Component {
       top: w * Math.sin(this.angle),
     });
   }
-
-  // rotate(angle) method ?
 }
 
 class MatrixBox extends Box {
@@ -78,7 +76,7 @@ class MatrixGrid extends Component {
         display: 'grid',
         gridTemplateColumns: 'repeat(4, auto)',
         gridTemplateRows: 'repeat(4, auto)',
-        gap: 10,
+        gap: 5,
       },
     );
 
@@ -97,6 +95,7 @@ class MatrixGrid extends Component {
         
         for (let label of Object.values(this.labels))
           label.adjustDivSizeForAngle();
+        
                 
         const topLabelsHeight = Math.max(
           this.labels.urgent.root.offsetHeight,

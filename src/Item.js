@@ -11,7 +11,6 @@ export class Item extends Box {
         left: coords[0],
         bottom: coords[1],
 
-        fontSize: 18,
         width: Store.buttonBarWidth,
         display: 'flex',
         gap: 10,
@@ -24,8 +23,10 @@ export class Item extends Box {
           autofocus: true,
           outline: 'none',
           spellcheck: false,
-          minWidth: 20,
+          // This causes div to expand to nicely fill up rest of parent nice.
+          flexGrow: '1',
         },
+        ' '
       ),
     );
 
