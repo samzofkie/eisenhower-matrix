@@ -1,5 +1,7 @@
 import { Component, Store } from "rhizome";
 import { Box } from './Box.js';
+import { DynamicText } from "./DynamicText.js";
+import { Crosshairs } from "./Crosshairs.js";
 
 function degreesToRadians(degree) {
   return degree * Math.PI / 180;
@@ -91,10 +93,9 @@ class MatrixGrid extends Component {
 
     // Adjust grid to size columns and rows depending on label dimensions.
     const observer = new MutationObserver(() => {
-      if (Object.values(this.labels).every(label => document.contains(label.span.root))) {
-        
-        for (let label of Object.values(this.labels))
-          label.adjustDivSizeForAngle();
+      if (Object.values(this.labels).every(label => document.contains(label.root))) {
+        //for (let label of Object.values(this.labels))
+          //label.adjustDivSizeForAngle();
         
                 
         const topLabelsHeight = Math.max(
@@ -117,10 +118,6 @@ class MatrixGrid extends Component {
   }
 
   createLabels() {
-    const labelStyle = {
-      //color: 'black',
-    };
-
     const topLabelOptions = {
       gridRow: '1 1',
       alignSelf: 'end',
@@ -137,29 +134,39 @@ class MatrixGrid extends Component {
 
     let column = 2;
     for (const labelText of ['urgent', 'not urgent']) {
-      this.labels[labelText] = new MatrixLabel(
+      /*this.labels[labelText] = new MatrixLabel(
         labelText,
         0,
         {
           gridColumn: `${column} / ${column}`,
-          ...labelStyle,
+          //...labelStyle,
           ...topLabelOptions,
         }
-      );
+      );*/
+      this.labels[labelText] = new DynamicText(labelText, 0, 2);
+      this.labels[labelText].set({
+        gridColumn: `${column} / ${column}`,
+        ...topLabelOptions,
+      });
       column++;
     }
 
     let row = 2;
     for (const labelText of ['important', 'unimportant']) {
-      this.labels[labelText] = new MatrixLabel(
+      /*this.labels[labelText] = new MatrixLabel(
         labelText,
         90,
         {
           gridRow: `${row} / ${row}`,
-          ...labelStyle,
+          //...labelStyle,
           ...sideLabelOptions,
         }
-      );
+      );*/
+      this.labels[labelText] = new DynamicText(labelText, 0, 2);
+      this.labels[labelText].set({
+        gridRow: `${row} / ${row}`,
+        ...sideLabelOptions,
+      });
       row++;
     }
   }
@@ -198,14 +205,32 @@ class MatrixGrid extends Component {
 
 export class Matrix extends Box {
   constructor() {
+    const width = document.body.offsetWidth * 0.6,
+          height = 600,
+          left = document.body.offsetWidth * 0.2;
     super(
       {
         backgroundColor: '#4f416b',
-        //width: document.body.offsetWidth * 0.6,
-        display: 'inline-block',
-        margin: 'auto',
+        position: 'relative',
+        width: width,
+        left: left,
+        height: height,
+        padding: 0,
+        borderRadius: 30,
+        overflow: 'hidden',
       },
-      new MatrixGrid,
+      //new MatrixGrid,
     );
+
+    Store.matrixLocation = {
+      x: left,
+      y: 0,
+      w: width,
+      h: height,
+    };
+
+    Store.matrixCrosshairs = new Crosshairs(width, height, {x: left, y: 0});
+    this.append(...Store.matrixCrosshairs);
+    //console.log(...Store.matrixCrosshairs);
   }
 }

@@ -11,11 +11,13 @@
   Store.colors = [
     '#2d2c45',
     '#4f416b',
-    '#0862bd'
+    '#0862bd',
+    '#41a3a0',
   ];
   Store.items = [];
   Store.itemCreationPoint = {x: 20, y: 20};
   Store.itemWidth = 250;
+  Store.matrixLocation = {x: 0, y: 0, w: 0, h: 0};
 
   let page = new Page(
     'eisenhower-matrix',
@@ -24,6 +26,7 @@
       color: 'white',
       fontFamily: 'Work Sans, Arial, Helvetica, sans-serif',
       fontSize: 18,
+      margin: 0,
     },
     new Component(
       'meta',
@@ -45,22 +48,10 @@
     //const text = new DynamicText('Sam Z! Longer longer longer longer!!!', 0, -10);
 
     page.append(
-      //new Matrix,
+      new Matrix,
       new ButtonBar,
       //text,
     );
-
-    let x = 0, y = 0;
-    for (let t of [
-      'Replace bulb in Kia tail light',
-      'Get new computer charger',
-      'Get health insurance',
-    ]) {
-      let item = new Item({x: x, y: y});
-      item.input.append(t);
-      document.body.appendChild(item.root);
-      y += item.root.offsetHeight + 10;
-    }
   };
   
 </script>
