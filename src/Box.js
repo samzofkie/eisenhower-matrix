@@ -12,4 +12,7 @@ export class Box extends Component {
       ...children
     )
   }
+
+  width() { return this.root.offsetWidth; }
+  height() { return this.root.offsetHeight; }
 }

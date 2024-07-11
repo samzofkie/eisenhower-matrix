@@ -14,10 +14,7 @@
     '#0862bd',
     '#41a3a0',
   ];
-  Store.items = [];
-  Store.itemCreationPoint = {x: 20, y: 20};
   Store.itemWidth = 250;
-  Store.matrixLocation = {x: 0, y: 0, w: 0, h: 0};
 
   let page = new Page(
     'eisenhower-matrix',
@@ -47,11 +44,13 @@
   document.body.onload = _ => {
     //const text = new DynamicText('Sam Z! Longer longer longer longer!!!', 0, -10);
 
+    const matrix = new Matrix;
     page.append(
-      new Matrix,
+      matrix,
       new ButtonBar,
       //text,
     );
+    Store.matrix = matrix;
   };
   
 </script>

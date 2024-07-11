@@ -1,7 +1,8 @@
 import { Component, Store } from "rhizome";
 import { Box } from "./Box";
+import { pxToNumber } from './pxToNumber';
 
-function pxToNumber(s) { return Number(s.slice(0,-2)); }
+//function pxToNumber(s) { return Number(s.slice(0,-2)); }
 function pointIn(point, location) {
   return point.x >= location.x &&
          point.x <= location.x + location.w &&
@@ -9,9 +10,8 @@ function pointIn(point, location) {
          point.y <= location.y + location.h;
 }
 function pointInMatrix(point) {
-  return pointIn(point, Store.matrixLocation);
+  return pointIn(point, Store.matrix.location);
 }
-
 
 export class Item extends Box {
   constructor(coord = null) {
@@ -71,7 +71,7 @@ export class Item extends Box {
             y: event.clientY - pxToNumber(this.root.style.top),
           };
         } else {
-          this.unselect();
+          this.unselect(event);
         }
       }
     });
@@ -84,28 +84,35 @@ export class Item extends Box {
       }, 
       ondblclick: _ => this.input.root.focus(),
     });
-
-    Store.items.push(this);
   }
 
   select(event) {      
     if (this.positionedRelativeToBottom)
       this.switchToBeingPositionedRelativeToTop();
+
+    if (this.root.style.transition)
+      this.set({transition: false});
+
     this.set({border: '2px solid white'});
     Store.currentlySelectedItem = this;
     document.addEventListener('mousemove', this.mousemoveHandler);
     
     const point = {x: event.clientX, y: event.clientY};
     if (pointInMatrix(point))
-      Store.matrixCrosshairs.show();
+      Store.matrix.crosshairs.show();
   }
 
-  unselect() {
+  unselect(event) {
     this.set({border: 'none'});
     Store.currentlySelectedItem = null;
     document.removeEventListener('mousemove', this.mousemoveHandler);
-    if (!Store.matrixCrosshairs.hidden)
-      Store.matrixCrosshairs.hide();
+    if (!Store.matrix.crosshairs.hidden)
+      Store.matrix.crosshairs.hide();
+
+    const point = {x: event.clientX, y: event.clientY};
+    
+    if (pointInMatrix(point))
+      Store.matrix.insertItem(this);
   }
 
   isSelected() {
@@ -131,12 +138,24 @@ export class Item extends Box {
     });
 
     if (pointInMatrix(p)) {
-      if (Store.matrixCrosshairs.hidden)
-        Store.matrixCrosshairs.show();
-      Store.matrixCrosshairs.move(p);
+      if (Store.matrix.crosshairs.hidden)
+        Store.matrix.crosshairs.show();
+      Store.matrix.crosshairs.move({
+        x: p.x - this.moveOffset.x + this.root.offsetWidth / 2,
+        y: p.y - this.moveOffset.y + this.root.offsetHeight / 2,
+      });
     } else {
-      if (!Store.matrixCrosshairs.hidden)
-        Store.matrixCrosshairs.hide();
+      if (!Store.matrix.crosshairs.hidden)
+        Store.matrix.crosshairs.hide();
     }
+  }
+
+  getPosition() {
+    return {
+      x: pxToNumber(this.root.style.left),
+      y: pxToNumber(this.root.style.top),
+      w: this.root.offsetWidth,
+      h: this.root.offsetHeight, 
+    };
   }
 };

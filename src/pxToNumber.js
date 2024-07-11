@@ -1,0 +1,1 @@
+export function pxToNumber(s) { return Number(s.slice(0,-2)); }
