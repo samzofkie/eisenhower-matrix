@@ -1,5 +1,6 @@
 import { Component, Store } from "rhizome";
 import { Box } from './Box.js';
+import { Item } from './Item.js';
 //import { DynamicText } from "./DynamicText.js";
 import { Crosshairs } from "./Crosshairs.js";
 
@@ -29,9 +30,31 @@ export class Matrix extends Box {
 
     this.crosshairs = new Crosshairs(width, height, {x: left, y: 0});
     this.append(...this.crosshairs);
+  }
 
-    this.urgent = [];
-    this.important = [];
+  createItemsFromLocalStorage() {
+
+    function getStrings(key) {
+      const strings = localStorage.getItem(key);
+      return strings === null ? [] : JSON.parse(strings);
+    }
+
+    this.important = getStrings('important').map(string => {
+      const item = new Item({x: 0, y: 0});
+      item.input.root.innerText = string;
+      return item;
+    });
+    this.urgent = getStrings('urgent').map(string =>
+      this.important.find(item => item.input.root.innerText === string.trim())
+    );
+
+    for (const item of this.important)
+      document.body.append(item.root);
+
+    this.reorderItems();
+
+    for (const item of this.important)
+      item.set({transition: 'left 0.15s, top 0.15s'});
   }
 
   insertItem(item) {
@@ -65,17 +88,35 @@ export class Matrix extends Box {
     this.reorderItems();
   }
 
+  removeItem(item) {
+    this.important.splice(this.important.indexOf(item), 1);
+    this.urgent.splice(this.urgent.indexOf(item), 1);
+    this.reorderItems();
+  }
+
   reorderItems() {    
     const matrixWidth = this.width(),
           matrixHeight = this.height(),      
           columnWidth = matrixWidth / this.important.length,
           rowHeight = matrixHeight / this.important.length;
 
-    for (let item of this.important) {
+    for (let item of this.important)
       item.set({
         left: this.location.x + this.urgent.indexOf(item) * columnWidth + (columnWidth - item.width()) / 2,
         top: this.location.y + this.important.indexOf(item) * rowHeight + (rowHeight - item.height()) / 2, 
       });
-    }
+    
+    this.storeItems();
+  }
+  
+  storeItems() {
+    localStorage.setItem(
+      'important', 
+      JSON.stringify(this.important.map(item => item.input.root.innerText)),
+    );
+    localStorage.setItem(
+      'urgent', 
+      JSON.stringify(this.urgent.map(item => item.input.root.innerText)),
+    );
   }
 }

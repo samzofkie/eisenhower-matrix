@@ -15,6 +15,7 @@
     '#41a3a0',
   ];
   Store.itemWidth = 250;
+  Store.itemCreationPoint = {x: 0, y:0};
 
   let page = new Page(
     'eisenhower-matrix',
@@ -51,6 +52,7 @@
       //text,
     );
     Store.matrix = matrix;
+    matrix.createItemsFromLocalStorage();
   };
   
 </script>
